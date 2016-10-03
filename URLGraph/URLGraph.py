@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import queue
+from pip._vendor.requests.exceptions import HTTPError
 
 '''
 Simple graph object
@@ -97,7 +98,10 @@ def makeURLGraph(url):
     nodeQueue.put(urlmap.url_to_id[url])
     while not nodeQueue.empty():
         nexturl = urlmap.id_to_url[nodeQueue.get()]
-        data = requests.get(nexturl).text
+        try:
+            data = requests.get(nexturl).text
+        except HTTPError as e:
+            continue
         soup = BeautifulSoup(data,"html.parser")
         visitedList.append(urlmap.url_to_id[nexturl]) # to check cycles
         for link in soup.find_all('a'):
