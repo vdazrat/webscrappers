@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import queue
-from pip._vendor.requests.exceptions import HTTPError
+from urllib.error import HTTPError
 
 '''
 Simple graph object
